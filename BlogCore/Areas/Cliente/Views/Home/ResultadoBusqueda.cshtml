@@ -1,30 +1,22 @@
-﻿@model ListaPaginada<Articulo>
+﻿@model ListaPaginada<Medico>
 
-<h2 class="text-center">Lista de Entradas</h2>
+<h2 class="text-center">Resultados de la Búsqueda</h2>
 
-@* <form asp-action="Index" method="get">
-    <p>
-        <input type="text" name="searchString" />
-        <input type="submit" value="Buscar" />
-    </p>
-</form> *@
-
-
-<!-- Mostrar las entradas -->
+<!-- Mostrar los médicos encontrados -->
 @if (Model.Count() > 0)
 {
     <div class="row">
         <hr />
-        @foreach (var articulo in Model)
+        @foreach (var medico in Model)
         {
-
             <div class="col-4">
                 <div class="card">
-                    <img src="@articulo.UrlImagen" class="img-thumbnail" width="100%">
+                    <img src="@medico.UrlImagen" class="img-thumbnail">
                     <div class="card-body">
-                        <h5 class="text-center">@articulo.Nombre</h5>
-                        <a asp-action="Detalle" class="btn btn-success" style="border-radius:2px" asp-route-id="@articulo.Id">
-                            Más Información
+                        <h5 class="text-center">@medico.Nombre</h5>
+                        <p>Especialidad: @medico.Especialidad</p>
+                        <a asp-action="Detalle" class="btn btn-success" style="border-radius:2px" asp-route-id="@medico.Id">
+                            Ver perfil
                         </a>
                     </div>
                 </div>
@@ -34,13 +26,13 @@
 }
 else
 {
-    <p>No hay artículos</p>
+    <p>No se encontraron médicos.</p>
 }
 
 <br />
 <br />
 
-<!--Crear botones de páginación-->
+<!-- Crear botones de paginación -->
 <div class="text-center">
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -59,4 +51,3 @@ else
         </ul>
     </nav>
 </div>
-

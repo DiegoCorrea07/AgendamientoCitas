@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BlogCore.Models.HorarioMedico>
+
+@{
+    ViewData["Title"] = "Horarios Médicos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo Horario Médico</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Médico</th>
+            <th>Día</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Medico.Nombre</td>
+                <td>@item.DiaSemana</td>
+                <td>@item.HoraInicio.ToString(@"hh\:mm")</td>
+                <td>@item.HoraFin.ToString(@"hh\:mm")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

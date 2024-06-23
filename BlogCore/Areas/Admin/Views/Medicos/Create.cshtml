@@ -1,0 +1,67 @@
+﻿@model BlogCore.Models.ViewModels.MedicoVM
+
+@{
+    ViewData["Title"] = "Crear Médico";
+}
+
+<br />
+<br />
+<h3 class="text-center">Crear un nuevo Médico</h3>
+<form method="POST" asp-action="Create" enctype="multipart/form-data">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-10 offset-1 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Medico.Nombre"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Medico.Nombre" class="form-control" placeholder="Ingresa el nombre del médico" />
+                    <span asp-validation-for="Medico.Nombre" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Medico.EspecialidadId"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="Medico.EspecialidadId" class="form-control" asp-items="@Model.ListaEspecialidades">
+                        <option value="">- Seleccione Especialidad -</option>
+                    </select>
+                    <span asp-validation-for="Medico.EspecialidadId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Medico.UrlImagen"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" name="archivos" id="subidaArchivo" class="form-control" />
+                    <span asp-validation-for="Medico.UrlImagen" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group-row">
+                <div class="col-8">
+                    <button type="submit" class="btn btn-primary">Crear Médico</button>
+                    <a asp-action="Index" class="btn btn-success">Volver atrás</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

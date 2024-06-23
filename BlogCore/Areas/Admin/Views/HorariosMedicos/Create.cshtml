@@ -1,0 +1,53 @@
+﻿@model BlogCore.Models.HorarioMedico
+
+@{
+    ViewData["Title"] = "Crear Horario Médico";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create">
+    <br />
+    <div class="form-group">
+        <label asp-for="MedicoId" class="control-label">Médico</label>
+        <select asp-for="MedicoId" class="form-control" asp-items="ViewBag.ListaMedicos"></select>
+        <span asp-validation-for="MedicoId" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label asp-for="DiaSemana" class="control-label">Día de la Semana</label>
+        <select asp-for="DiaSemana" class="form-control">
+            <option value="Lunes">Lunes</option>
+            <option value="Martes">Martes</option>
+            <option value="Miércoles">Miércoles</option>
+            <option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option>
+            <option value="Sábado">Sábado</option>
+            <option value="Domingo">Domingo</option>
+        </select>
+        <span asp-validation-for="DiaSemana" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label asp-for="HoraInicio" class="control-label">Hora Inicio</label>
+        <input asp-for="HoraInicio" class="form-control" type="time" />
+        <span asp-validation-for="HoraInicio" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="HoraFin" class="control-label">Hora Fin</label>
+        <input asp-for="HoraFin" class="form-control" type="time" />
+        <span asp-validation-for="HoraFin" class="text-danger"></span>
+    </div>
+    <br/>
+    <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>

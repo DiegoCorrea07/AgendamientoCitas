@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BlogCore.Models.Tratamiento>
+
+@{
+    ViewData["Title"] = "Lista de Tratamientos";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-8">
+            <h2 class="text-primary">Lista de Tratamientos</h2>
+        </div>
+        <div class="col-4 text-right">
+            <a asp-action="Create" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Crear Nuevo Tratamiento</a>
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <table id="tblTratamientos" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descripción</th>
+                <th>Instrucciones</th>
+                <th>Dosificación</th>
+                <th>Frecuencia</th>
+                <th>Efectos Secundarios</th>
+                <th>Historial Médico Id</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tratamiento in Model)
+            {
+                <tr>
+                    <td>@tratamiento.Id</td>
+                    <td>@tratamiento.Descripcion</td>
+                    <td>@tratamiento.Instrucciones</td>
+                    <td>@tratamiento.Dosificacion</td>
+                    <td>@tratamiento.Frecuencia</td>
+                    <td>@tratamiento.EfectosSecundarios</td>
+                    <td>@tratamiento.HistorialMedicoId</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@tratamiento.Id" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i> Editar</a>
+                        <a asp-action="Delete" asp-route-id="@tratamiento.Id" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-alt"></i> Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/tratamientos.js"></script>
+}

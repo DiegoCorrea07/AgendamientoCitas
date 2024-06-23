@@ -22,7 +22,7 @@ namespace BlogCore.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BlogCore.Models.Articulo", b =>
+            modelBuilder.Entity("BlogCore.Models.Cita", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,15 +30,102 @@ namespace BlogCore.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoriaId")
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("Hora")
+                        .HasColumnType("time");
+
+                    b.Property<int>("MedicoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PacienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Citas");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Especialidad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FechaCreacion")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
+
+                    b.ToTable("Especialidades");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.HistorialMedico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PacienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("HistorialesMedicos");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.HorarioMedico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DiaSemana")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("HoraFin")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("HoraInicio")
+                        .HasColumnType("time");
+
+                    b.Property<int>("MedicoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.ToTable("HorariosMedicos");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Medico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EspecialidadId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -49,12 +136,12 @@ namespace BlogCore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriaId");
+                    b.HasIndex("EspecialidadId");
 
-                    b.ToTable("Articulo");
+                    b.ToTable("Medicos");
                 });
 
-            modelBuilder.Entity("BlogCore.Models.Categoria", b =>
+            modelBuilder.Entity("BlogCore.Models.Paciente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,16 +149,41 @@ namespace BlogCore.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Celular")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HistorialMedico")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Orden")
-                        .HasColumnType("int");
+                    b.Property<string>("UrlImagen")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categoria");
+                    b.ToTable("Pacientes");
                 });
 
             modelBuilder.Entity("BlogCore.Models.Slider", b =>
@@ -95,6 +207,43 @@ namespace BlogCore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Slider");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Tratamiento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Dosificacion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EfectosSecundarios")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Frecuencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HistorialMedicoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Instrucciones")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HistorialMedicoId");
+
+                    b.ToTable("Tratamientos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -251,12 +400,10 @@ namespace BlogCore.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -293,12 +440,10 @@ namespace BlogCore.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -331,15 +476,67 @@ namespace BlogCore.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("BlogCore.Models.Articulo", b =>
+            modelBuilder.Entity("BlogCore.Models.Cita", b =>
                 {
-                    b.HasOne("BlogCore.Models.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaId")
+                    b.HasOne("BlogCore.Models.Medico", "Medico")
+                        .WithMany("Citas")
+                        .HasForeignKey("MedicoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Categoria");
+                    b.HasOne("BlogCore.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.HistorialMedico", b =>
+                {
+                    b.HasOne("BlogCore.Models.Paciente", "Paciente")
+                        .WithMany("HistorialesMedicos")
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.HorarioMedico", b =>
+                {
+                    b.HasOne("BlogCore.Models.Medico", "Medico")
+                        .WithMany("Horarios")
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Medico", b =>
+                {
+                    b.HasOne("BlogCore.Models.Especialidad", "Especialidad")
+                        .WithMany("Medicos")
+                        .HasForeignKey("EspecialidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Especialidad");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Tratamiento", b =>
+                {
+                    b.HasOne("BlogCore.Models.HistorialMedico", "HistorialMedico")
+                        .WithMany("Tratamientos")
+                        .HasForeignKey("HistorialMedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HistorialMedico");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -391,6 +588,28 @@ namespace BlogCore.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Especialidad", b =>
+                {
+                    b.Navigation("Medicos");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.HistorialMedico", b =>
+                {
+                    b.Navigation("Tratamientos");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Medico", b =>
+                {
+                    b.Navigation("Citas");
+
+                    b.Navigation("Horarios");
+                });
+
+            modelBuilder.Entity("BlogCore.Models.Paciente", b =>
+                {
+                    b.Navigation("HistorialesMedicos");
                 });
 #pragma warning restore 612, 618
         }

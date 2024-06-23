@@ -1,0 +1,103 @@
+﻿@model BlogCore.Models.Tratamiento
+
+@{
+    ViewData["Title"] = "Crear Tratamiento";
+}
+
+<br />
+<br />
+<h3 class="text-center">Crear un nuevo Tratamiento</h3>
+<form method="POST" asp-action="Create">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-10 offset-1 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Descripcion"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Descripcion" class="form-control" placeholder="Ingresa la descripción del tratamiento" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Instrucciones"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Instrucciones" class="form-control" placeholder="Ingresa las instrucciones del tratamiento" />
+                    <span asp-validation-for="Instrucciones" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Dosificacion"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Dosificacion" class="form-control" placeholder="Ingresa la dosificación del tratamiento" />
+                    <span asp-validation-for="Dosificacion" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Frecuencia"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Frecuencia" class="form-control" placeholder="Ingresa la frecuencia del tratamiento" />
+                    <span asp-validation-for="Frecuencia" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="EfectosSecundarios"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="EfectosSecundarios" class="form-control" placeholder="Ingresa los efectos secundarios del tratamiento" />
+                    <span asp-validation-for="EfectosSecundarios" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="HistorialMedicoId"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="HistorialMedicoId" class="form-control" asp-items="ViewBag.HistorialMedicoId">
+                        <option value="">- Seleccione Historial Médico -</option>
+                    </select>
+                    <span asp-validation-for="HistorialMedicoId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group-row">
+                <div class="col-8">
+                    <button type="submit" class="btn btn-primary">Crear Tratamiento</button>
+                    <a asp-action="Index" class="btn btn-success">Volver atrás</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

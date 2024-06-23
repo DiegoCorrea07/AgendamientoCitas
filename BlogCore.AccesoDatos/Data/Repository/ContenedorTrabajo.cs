@@ -1,5 +1,6 @@
 ﻿using BlogCore.AccesoDatos.Data.Repository.IRepository;
 using BlogCore.Data;
+using BlogCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +16,26 @@ namespace BlogCore.AccesoDatos.Data.Repository
         public ContenedorTrabajo(ApplicationDbContext db)
         {
             _db = db;
-            Categoria = new CategoriaRepository(_db);
-            Articulo = new ArticuloRepository(_db);
-            Slider = new SliderRepository(_db);
+            Cita = new CitaRepository(_db);
+            Paciente = new PacienteRepository(_db);
+            Medico = new MedicoRepository(_db);
             Usuario = new UsuarioRepository(_db);
+            Especialidad = new EspecialidadRepository(_db);
+            HistorialMedico = new HistorialMedicoRepository(_db);
+            Tratamiento = new TratamientoRepository(_db);
+            Slider = new SliderRepository(_db);
+            HorarioMedico = new HorarioMedicoRepository(_db);
         }
 
-        public ICategoriaRepository Categoria { get; private set; }
-        public IArticuloRepository Articulo { get; private set; }
-
-        public ISliderRepository Slider { get; private set; }
-
+        public ICitaRepository Cita { get; private set; }
+        public IPacienteRepository Paciente { get; private set; }
+        public IMedicoRepository Medico { get; private set; }
         public IUsuarioRepository Usuario { get; private set; }
+        public IEspecialidadRepository Especialidad { get; private set; }
+        public IHistorialMedicoRepository HistorialMedico { get; private set; }
+        public ITratamientoRepository Tratamiento { get; private set; }
+        public ISliderRepository Slider { get; private set; }
+        public IHorarioMedicoRepository HorarioMedico { get; private set; }
 
         public void Dispose()
         {

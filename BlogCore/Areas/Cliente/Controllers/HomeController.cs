@@ -1,9 +1,10 @@
 using BlogCore.AccesoDatos.Data.Repository.IRepository;
 using BlogCore.Models;
 using BlogCore.Models.ViewModels;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Drawing.Printing;
+using System.Linq;
 
 namespace BlogCore.Areas.Cliente.Controllers
 {
@@ -12,76 +13,68 @@ namespace BlogCore.Areas.Cliente.Controllers
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
 
+        private readonly IWebHostEnvironment _hostEnvironment;
+
         public HomeController(IContenedorTrabajo contenedorTrabajo)
         {
             _contenedorTrabajo = contenedorTrabajo;
         }
 
-        //Primera versión página de inicio sin paginación
-        //[HttpGet]
-        //public IActionResult Index()
-        //{
-        //    HomeVM homeVM = new HomeVM()
-        //    {
-        //        Sliders = _contenedorTrabajo.Slider.GetAll(),
-        //        ListArticulos = _contenedorTrabajo.Articulo.GetAll()
-        //    };
-
-        //    //Esta línea es para poder saber si estamos en el home o no
-        //    ViewBag.IsHome = true;
-
-        //    return View(homeVM);
-        //}
-
-        //Segunda versión página de inicio con paginación
+        // Segunda versión página de inicio con paginación
         [HttpGet]
         public IActionResult Index(int page = 1, int pageSize = 6)
         {
-
-            var articulos = _contenedorTrabajo.Articulo.AsQueryable();
+            var medicos = _contenedorTrabajo.Medico.GetAll().AsQueryable();
+           
 
             // Paginar los resultados
-            var paginatedEntries = articulos.Skip((page - 1) * pageSize).Take(pageSize);
+            var paginatedEntries = medicos.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
+            
+
+            // Crear el modelo para la vista
             HomeVM homeVM = new HomeVM()
             {
                 Sliders = _contenedorTrabajo.Slider.GetAll(),
-                ListArticulos = paginatedEntries.ToList(),
+                ListMedicos = paginatedEntries,
                 PageIndex = page,
-                TotalPages = (int)Math.Ceiling(articulos.Count() / (double)pageSize)
-        };
+                TotalPages = (int)System.Math.Ceiling((double)medicos.Count() / pageSize)
+            };
 
-            //Esta línea es para poder saber si estamos en el home o no
+            // Esta línea es para poder saber si estamos en el home o no
             ViewBag.IsHome = true;
 
             return View(homeVM);
         }
 
-
-        //Para buscador
+        // Para buscador
         [HttpGet]
         public IActionResult ResultadoBusqueda(string searchString, int page = 1, int pageSize = 3)
         {
-            var articulos = _contenedorTrabajo.Articulo.AsQueryable();
+            var medicos = _contenedorTrabajo.Medico.GetAll().AsQueryable();
 
             // Filtrar por título si hay un término de búsqueda
             if (!string.IsNullOrEmpty(searchString))
             {
-                articulos = articulos.Where(e => e.Nombre.Contains(searchString));
+                medicos = medicos.Where(e => e.Nombre.Contains(searchString));
             }
 
             // Paginar los resultados
-            var paginatedEntries = articulos.Skip((page - 1) * pageSize).Take(pageSize);
+            var paginatedEntries = medicos.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             // Crear el modelo para la vista
-            var model = new ListaPaginada<Articulo>(paginatedEntries.ToList(), articulos.Count(), page, pageSize, searchString);
+            var model = new ListaPaginada<Medico>(paginatedEntries, medicos.Count(), page, pageSize, searchString);
             return View(model);
         }
 
         [HttpGet]
         public IActionResult Detalle(int id)
         {
-            var articuloDesdeBd = _contenedorTrabajo.Articulo.Get(id);
+            var articuloDesdeBd = _contenedorTrabajo.Medico.Get(id);
+            if (articuloDesdeBd == null)
+            {
+                return NotFound();
+            }
             return View(articuloDesdeBd);
         }
 

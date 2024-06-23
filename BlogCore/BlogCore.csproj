@@ -27,20 +27,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\imagenes\articulos\" />
-    <Folder Include="wwwroot\imagenes\sliders\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Areas\Cliente\Views\Home\ResultadoBusqueda.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Areas\Cliente\Views\Home\ResultadoBusqueda.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Areas\Cliente\Views\Home\ResultadoBusqueda.cshtml" />
+    <None Include="Areas\Admin\Views\Especialidades\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Especialidades\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Especialidades\Index.cshtml" />
+    <None Include="Areas\Admin\Views\HistorialMedico\Create.cshtml" />
+    <None Include="Areas\Admin\Views\HistorialMedico\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\HistorialMedico\Index.cshtml" />
+    <None Include="Areas\Admin\Views\HorariosMedicos\Create.cshtml" />
+    <None Include="Areas\Admin\Views\HorariosMedicos\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\HorariosMedicos\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Medicos\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Medicos\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Medicos\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Pacientes\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Pacientes\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Pacientes\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Tratamientos\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Tratamientos\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Tratamientos\Index.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,131 @@
+﻿@model BlogCore.Models.ViewModels.PacienteVM
+
+@{
+    ViewData["Title"] = "Crear Paciente";
+}
+
+<br />
+<br />
+<h3 class="text-center">Crear un nuevo paciente</h3>
+<form method="POST" asp-action="Create" enctype="multipart/form-data">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-10 offset-1 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.Nombre"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Paciente.Nombre" class="form-control" placeholder="Ingresa el nombre" />
+                    <span asp-validation-for="Paciente.Nombre" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.FechaNacimiento"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Paciente.FechaNacimiento" class="form-control" type="date" />
+                    <span asp-validation-for="Paciente.FechaNacimiento" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.Genero"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="Paciente.Genero" class="form-control">
+                        <option value="">Seleccione Género</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <span asp-validation-for="Paciente.Genero" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.Direccion"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Paciente.Direccion" class="form-control" placeholder="Ingresa la dirección" />
+                    <span asp-validation-for="Paciente.Direccion" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.Celular"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Paciente.Celular" class="form-control" placeholder="Ingresa el número de celular" />
+                    <span asp-validation-for="Paciente.Celular" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.Email"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Paciente.Email" class="form-control" placeholder="Ingresa el correo electrónico" />
+                    <span asp-validation-for="Paciente.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.HistorialMedico"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Paciente.HistorialMedico" class="form-control" rows="4" placeholder="Ingresa el historial médico"></textarea>
+                    <span asp-validation-for="Paciente.HistorialMedico" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Paciente.UrlImagen"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" name="archivos" id="subidaArchivo" class="form-control" />
+                    <span asp-validation-for="Paciente.UrlImagen" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group-row">
+                <div class="col-8">
+                    
+                    <partial name="_VistaCrearVolver" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
