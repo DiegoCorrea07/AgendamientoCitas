@@ -1,0 +1,106 @@
+﻿@model BlogCore.Models.ViewModels.CitaVM
+
+@{
+    ViewData["Title"] = "Editar Cita";
+}
+
+<h2>Editar Cita</h2>
+
+<form asp-action="Edit" method="post">
+    <br />
+    <div class="form-group">
+        <label asp-for="Cita.Fecha" class="control-label"></label>
+        <input asp-for="Cita.Fecha" class="form-control" id="fechaSeleccionada" />
+        <span asp-validation-for="Cita.Fecha" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Cita.MedicoId" class="control-label"></label>
+        <select asp-for="Cita.MedicoId" class="form-control" id="medicoSeleccionado">
+            <option value="">Seleccione un Médico</option>
+            @foreach (var medico in Model.ListaMedicos)
+            {
+                <option value="@medico.Value" selected="@medico.Selected">@medico.Text</option>
+            }
+        </select> <span asp-validation-for="Cita.MedicoId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Cita.Hora" class="control-label"></label>
+        <select asp-for="Cita.Hora" class="form-control" id="horariosDisponibles">
+            <option value="">Seleccione una Hora</option>
+        </select>
+        <span asp-validation-for="Cita.Hora" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Cita.PacienteId" class="control-label"></label>
+        <select asp-for="Cita.PacienteId" class="form-control">
+            <option value="">Seleccione un Paciente</option>
+            @foreach (var paciente in Model.ListaPacientes)
+            {
+                <option value="@paciente.Value" selected="@paciente.Selected">@paciente.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Cita.PacienteId" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label asp-for="Cita.Observaciones" class="control-label"></label>
+        <textarea asp-for="Cita.Observaciones" class="form-control"></textarea>
+        <span asp-validation-for="Cita.Observaciones" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Editar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-success">Volver atrás</a>
+    </div>
+    <br />
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#fechaSeleccionada, #medicoSeleccionado').change(function () {
+                var medicoId = $('#medicoSeleccionado').val();
+                var fecha = $('#fechaSeleccionada').val();
+
+                console.log("Medico ID:", medicoId);
+                console.log("Fecha:", fecha);
+
+
+                if (medicoId && fecha) {
+                    $.ajax({
+                        url: '@Url.Action("GetDisponibilidad", "Citas", new { area = "Admin" })',
+                        type: 'GET',
+                        data: { medicoId: medicoId, fecha: fecha },
+                        success: function (response) {
+                            var horariosDisponibles = $('#horariosDisponibles');
+                            horariosDisponibles.empty();
+
+                            horariosDisponibles.append($('<option>', {
+                                value: '',
+                                text: 'Seleccione una Hora'
+                            }));
+
+                            $.each(response.data, function (i, item) {
+                                horariosDisponibles.append($('<option>', {
+                                    value: item,
+                                    text: item
+                                }));
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#fechaSeleccionada').val('@Model.Cita.Fecha.ToString("yyyy-MM-dd")').trigger('change'); 
+            $('#medicoSeleccionado').val('@Model.Cita.MedicoId').trigger('change');
+        });
+    </script>
+}

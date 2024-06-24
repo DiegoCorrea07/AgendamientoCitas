@@ -70,12 +70,17 @@ namespace BlogCore.Areas.Cliente.Controllers
         [HttpGet]
         public IActionResult Detalle(int id)
         {
-            var articuloDesdeBd = _contenedorTrabajo.Medico.Get(id);
-            if (articuloDesdeBd == null)
+            var medicoDesdeBd = _contenedorTrabajo.Medico.GetFirstOrDefault(
+                m => m.Id == id,
+                includeProperties: "Especialidad,Horarios"
+            );
+
+            if (medicoDesdeBd == null)
             {
                 return NotFound();
             }
-            return View(articuloDesdeBd);
+
+            return View(medicoDesdeBd);
         }
 
         public IActionResult Privacy()

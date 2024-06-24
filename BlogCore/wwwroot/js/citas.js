@@ -1,7 +1,12 @@
 ﻿var dataTable;
 
 $(document).ready(function () {
-    $('#tblCitas').DataTable({
+    cargarDatatable();
+});
+
+
+function cargarDatatable() {
+    dataTable = $('#tblCitas').DataTable({
         "ajax": {
             "url": "/Admin/Citas/GetAll",
             "type": "GET",
@@ -9,9 +14,20 @@ $(document).ready(function () {
         },
         "columns": [
             { "data": "id", "width": "5%" },
-            { "data": "fecha", "width": "10%" },
-            { "data": "hora", "width": "10%" },
             { "data": "pacienteNombre", "width": "20%" },
+            {
+                "data": "fecha",
+                "width": "15%",
+                "render": function (data, type, row) {
+                    // Formatear la fecha como "dd/MM/yyyy" 
+                    var fecha = new Date(data); // Convertir la cadena de fecha a un objeto Date
+                    var dia = fecha.getDate().toString().padStart(2, '0');
+                    var mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Los meses en JavaScript van de 0 a 11
+                    var anio = fecha.getFullYear();
+                    return dia + '/' + mes + '/' + anio;
+                }
+            },
+            { "data": "hora", "width": "10%" },
             { "data": "medicoNombre", "width": "20%" },
             { "data": "observaciones", "width": "25%" },
             {
@@ -76,6 +92,7 @@ function eliminarCita(id) {
                     toastr.error(data.message);
                 }
             },
+
             error: function (err) {
                 console.error(err);
                 toastr.error("Error al intentar eliminar la cita.");

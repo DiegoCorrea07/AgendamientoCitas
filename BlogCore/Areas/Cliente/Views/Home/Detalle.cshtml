@@ -9,19 +9,35 @@
     <div class="card">
         <div class="card-header bg-light text-light">
             <div class="col-12">
-                <h1 class="text-primary text-center">@Model.Nombre</h1>
+                <h1 class="text-primary text-center">@(Model?.Nombre ?? "Nombre no disponible")</h1>
             </div>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-md-4">
-                    <img src="@Model.UrlImagen" class="img-thumbnail mx-auto d-block" />
+                    <img src="@(Model?.UrlImagen ?? "/ruta/por/defecto.jpg")" class="img-thumbnail mx-auto d-block" />
                 </div>
                 <div class="col-12 col-md-8">
                     <h5 class="card-title">Detalles del Médico</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Especialidad:</strong> @Model.Especialidad.Nombre</li>
+                        <li class="list-group-item"><strong>Especialidad:</strong> @(Model?.Especialidad?.Nombre ?? "Especialidad no disponible")</li>
                         @* Otros detalles específicos del médico podrían agregarse aquí *@
+                    </ul>
+                    <h5 class="card-title mt-3">Horarios</h5>
+                    <ul class="list-group list-group-flush">
+                        @if (Model?.Horarios != null && Model.Horarios.Any())
+                        {
+                            @foreach (var horario in Model.Horarios)
+                            {
+                                <li class="list-group-item">
+                                    <strong>@horario.DiaSemana:</strong> @horario.HoraInicio.ToString("hh\\:mm") - @horario.HoraFin.ToString("hh\\:mm")
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item">No hay horarios disponibles.</li>
+                        }
                     </ul>
                 </div>
             </div>

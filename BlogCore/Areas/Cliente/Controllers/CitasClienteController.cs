@@ -1,46 +1,28 @@
 ﻿using BlogCore.AccesoDatos.Data.Repository.IRepository;
-using BlogCore.Models.ViewModels;
 using BlogCore.Models;
+using BlogCore.Models.ViewModels;
+using BlogCore.Utilidades;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TuProyecto.Areas.Admin.Controllers
+namespace TuProyecto.Areas.Cliente.Controllers // Asegúrate de que esté en el área "Cliente"
 {
-    [Authorize(Roles = "Administrador")]
-    [Area("Admin")]
-    public class CitasController : Controller
+    [Authorize(Roles = CNT.Registrado)]
+    [Area("Cliente")]
+    public class CitasClienteController : Controller
     {
         private readonly IContenedorTrabajo _contenedorTrabajo;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CitasController(IContenedorTrabajo contenedorTrabajo)
+        public CitasClienteController(IContenedorTrabajo contenedorTrabajo, UserManager<IdentityUser> userManager)
         {
             _contenedorTrabajo = contenedorTrabajo;
-        }
-
-        // Método para validar la disponibilidad del médico en la fecha y hora seleccionadas
-        private bool ValidarDisponibilidadMedico(int medicoId, DateTime fecha, TimeSpan hora)
-        {
-            // Obtener el día de la semana de la fecha seleccionada
-            var diaSemanaSeleccionado = fecha.DayOfWeek;
-
-            // Buscar los horarios del médico para el día seleccionado
-            var horariosMedico = _contenedorTrabajo.HorarioMedico.GetAll(h => h.MedicoId == medicoId);
-
-            // Verificar si hay algún horario que coincida con el día de la semana y la hora seleccionadas
-            foreach (var horario in horariosMedico)
-            {
-                if (HorarioMedico.DiaSemanaToDayOfWeek[horario.DiaSemana] == diaSemanaSeleccionado &&
-                    hora >= horario.HoraInicio && hora < horario.HoraFin)
-                {
-                    return true; // El médico está disponible en esta hora
-                }
-            }
-
-            return false; // El médico no está disponible en esta hora
+            _userManager = userManager;
         }
 
         // Método para enviar un recordatorio de cita al paciente (ejemplo simulado)
@@ -51,46 +33,48 @@ namespace TuProyecto.Areas.Admin.Controllers
             {
                 string mensaje = $"Recordatorio de cita médica el {cita.Fecha.ToShortDateString()} a las {cita.Hora.ToString(@"hh\:mm")}.";
                 // Lógica para enviar el mensaje por correo electrónico, SMS, etc.
-                // Ejemplo simulado:
+               
                 // EmailService.SendEmail(paciente.CorreoElectronico, "Recordatorio de cita médica", mensaje);
             }
         }
 
-        // GET: Admin/Citas/Index
-        [HttpGet]
+
+        // GET: Cliente/CitasCliente
         public IActionResult Index()
         {
-            var citas = _contenedorTrabajo.Cita.GetAll(includeProperties: "Medico,Paciente");
+            var userId = _userManager.GetUserId(User);
+            var citas = _contenedorTrabajo.Cita.GetAll(c => c.Paciente.UserId == User.Identity.Name, includeProperties: "Medico,Paciente");
+
             return View(citas);
         }
 
-        [HttpGet]
+        // GET: Cliente/CitasCliente/Create
         public IActionResult Create()
         {
+            var userId = _userManager.GetUserId(User);
             var viewModel = new CitaVM
             {
                 ListaMedicos = _contenedorTrabajo.Medico.GetAll()
-                                .Select(m => new SelectListItem
-                                {
-                                    Value = m.Id.ToString(),
-                                    Text = m.Nombre
-                                })
-                                .ToList(),
-                ListaPacientes = _contenedorTrabajo.Paciente.GetAll()
-                                .Select(p => new SelectListItem
-                                {
-                                    Value = p.Id.ToString(),
-                                    Text = p.Nombre
-                                })
-                                .ToList(),
-                CitasDisponibles = new List<Cita>() // Inicializamos una lista vacía para las citas disponibles
+                    .Select(m => new SelectListItem
+                    {
+                        Value = m.Id.ToString(),
+                        Text = m.Nombre
+                    })
+                    .ToList(),
+                ListaPacientes = _contenedorTrabajo.Paciente.GetAll(p => p.UserId == userId) // Filtrar pacientes por el cliente actual
+                    .Select(p => new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Nombre
+                    })
+                    .ToList(),
+                CitasDisponibles = new List<Cita>()
             };
-
             return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult GetCitasDisponibles(int medicoId, DateTime fecha, CitaVM model)
+        public List<Cita> GetCitasDisponibles(int medicoId, DateTime fecha, CitaVM model)
         {
             // Obtener el día de la semana correspondiente a la fecha seleccionada por el usuario
             DayOfWeek diaSemanaSeleccionado = fecha.DayOfWeek;
@@ -137,8 +121,7 @@ namespace TuProyecto.Areas.Admin.Controllers
                 }
             }
 
-            // Retornar los resultados en formato JSON
-            return Json(new { data = citasDisponibles });
+            return citasDisponibles;
         }
 
         [HttpPost]
@@ -184,32 +167,6 @@ namespace TuProyecto.Areas.Admin.Controllers
                                     .ToList();
 
             return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var cita = _contenedorTrabajo.Cita.Get(id);
-            if (cita == null)
-            {
-                return NotFound();
-            }
-
-            return View(cita);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Cita cita)
-        {
-            if (ModelState.IsValid)
-            {
-                _contenedorTrabajo.Cita.Update(cita);
-                _contenedorTrabajo.Save();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(cita);
         }
 
         private readonly Dictionary<DayOfWeek, int> diaSemanaMap = new Dictionary<DayOfWeek, int>
@@ -271,42 +228,5 @@ namespace TuProyecto.Areas.Admin.Controllers
 
             return Json(new { data = disponibilidad });
         }
-
-        #region Llamadas a la API
-
-        // Método para obtener todas las citas en formato JSON
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var citas = _contenedorTrabajo.Cita.GetAll(includeProperties: "Paciente,Medico");
-            var citasVM = citas.Select(c => new
-            {
-                c.Id,
-                c.Fecha,
-                c.Hora,
-                PacienteNombre = c.Paciente != null ? c.Paciente.Nombre : "No asignado",
-                MedicoNombre = c.Medico != null ? c.Medico.Nombre : "No asignado",
-                c.Observaciones
-            });
-
-            return Json(new { data = citasVM });
-        }
-
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            var citaDesdeBd = _contenedorTrabajo.Cita.Get(id);
-            if (citaDesdeBd == null)
-            {
-                return Json(new { success = false, message = "Error borrando cita" });
-            }
-
-            _contenedorTrabajo.Cita.Remove(citaDesdeBd);
-            _contenedorTrabajo.Save();
-            return Json(new { success = true, message = "Cita borrada correctamente" });
-        }
-
-
-        #endregion
     }
 }

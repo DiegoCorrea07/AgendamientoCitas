@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogCore.Areas.Admin.Controllers
 {
@@ -24,6 +25,7 @@ namespace BlogCore.Areas.Admin.Controllers
             _contenedorTrabajo = contenedorTrabajo;
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
+           
         }
 
         [HttpGet]
@@ -54,6 +56,8 @@ namespace BlogCore.Areas.Admin.Controllers
                 string rutaPrincipal = _hostingEnvironment.WebRootPath;
                 var archivos = HttpContext.Request.Form.Files;
 
+
+
                 if (pacienteVM.Paciente.Id == 0 && archivos.Count > 0)
                 {
                     // Nuevo paciente con imagen
@@ -67,6 +71,7 @@ namespace BlogCore.Areas.Admin.Controllers
                     }
 
                     pacienteVM.Paciente.UrlImagen = @"\imagenes\pacientes\" + nombreArchivo + extension;
+
 
                     _contenedorTrabajo.Paciente.Add(pacienteVM.Paciente);
                     _contenedorTrabajo.Save();

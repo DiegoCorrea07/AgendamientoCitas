@@ -51,7 +51,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasIndex("PacienteId");
 
-                    b.ToTable("Citas");
+                    b.ToTable("Citas", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.Especialidad", b =>
@@ -68,7 +68,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Especialidades");
+                    b.ToTable("Especialidades", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.HistorialMedico", b =>
@@ -86,7 +86,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasIndex("PacienteId");
 
-                    b.ToTable("HistorialesMedicos");
+                    b.ToTable("HistorialesMedicos", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.HorarioMedico", b =>
@@ -113,7 +113,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasIndex("MedicoId");
 
-                    b.ToTable("HorariosMedicos");
+                    b.ToTable("HorariosMedicos", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.Medico", b =>
@@ -138,7 +138,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasIndex("EspecialidadId");
 
-                    b.ToTable("Medicos");
+                    b.ToTable("Medicos", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.Paciente", b =>
@@ -183,7 +183,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pacientes");
+                    b.ToTable("Pacientes", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.Slider", b =>
@@ -206,7 +206,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Slider");
+                    b.ToTable("Slider", (string)null);
                 });
 
             modelBuilder.Entity("BlogCore.Models.Tratamiento", b =>
@@ -243,7 +243,7 @@ namespace BlogCore.Data.Migrations
 
                     b.HasIndex("HistorialMedicoId");
 
-                    b.ToTable("Tratamientos");
+                    b.ToTable("Tratamientos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
